@@ -1,0 +1,199 @@
+<div class="survey-form-wrap d-flex justify-content-center w-100">
+  <div class="survey-container">
+    <div class="d-flex justify-content-between align-items-center header-section">
+      <div class="form-heading">Create New Survey</div>
+      <div>
+        <span class="survey-information me-4">* This Survey Is For Coaches Only</span>
+        <button class="publish-btn me-2">Preview</button>
+        <button class="cancel-btn me-2">Cancel</button>
+        <button class="publish-btn">Publish</button>
+      </div>
+    </div>
+    <!-- <div class="form-heading">Create New Survey</div> -->
+    <form class="survey-form" [formGroup]="surveyForm">
+      <div class="row g-3">
+        <div class="col-lg-4 col-md-6 col-12">
+          <!-- select surevey Type -->
+          <label for="surveyType" class="form-label">Select Survey Type</label>
+          <tvsm-select
+            #surveyType
+            id="surveyType"
+            [options]="survey_type"
+            (selectionChange)="onSelectChange($event)"
+          >
+          </tvsm-select>
+        </div>
+        <div class="col-lg-4 col-md-6 col-12">
+          <!-- select coach grp -->
+          <label for="coach_group" class="form-label">Select Coach Group</label>
+          <tvsm-dropdown
+            [options]="coach_group"
+            placeholder="Select"
+            [searchable]="true"
+            [multiple]="true"
+            id="coach_group"
+            [showCheckboxes]="true"
+            [filterIcon]="false"
+            searchPlaceholder="Search"
+            [searchIconContent]="searchIcon"
+            [arrowIconContent]="arrowIcon"
+          ></tvsm-dropdown>
+        </div>
+      </div>
+
+      <div>
+        <!-- survey description -->
+        <label for="description" class="form-label">Survey Description</label>
+        <tvsm-textarea maxlength="250" name="description"> </tvsm-textarea>
+      </div>
+
+      <div>
+        <!-- Email notification -->
+        <label class="form-label d-block" for="email-notification">Email Notification</label>
+        <div class="form-check form-switch toggle-section mt-3">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="email-notification"
+            [checked]="isEmailEnabled"
+            (change)="toggleEmailNotification()"
+          />
+          @if (isEmailEnabled) {
+            <div class="d-flex column-gap-2 align-items-center">
+              <select
+                id="timing"
+                class="form-select custom-timing-select"
+                formControlName="timing"
+                (change)="onSelectChangeTiming($event)"
+              >
+                <option value="" disabled selected>Select</option>
+                <option *ngFor="let option of timing" [value]="option.label">
+                  {{ option.label }}
+                </option>
+              </select>
+              <div class="timing-text">before survey starts</div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <!-- Add questions section -->
+        <h1 class="form-label d-block">Add Questions</h1>
+
+        @for (q of questions; track q.id) {
+          <div class="question-card-wrapper mt-3">
+            <!-- QUESTION TYPE -->
+            <div class="question-type-section">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="select-section">
+                  <tvsm-select
+                    [options]="question_type"
+                    placeholder="Select Type"
+                    name="questionType{{ q.id }}"
+                    [(ngModel)]="q.type"
+                    (selectionChange)="onQuestionTypeChange(q, $event)"
+                  ></tvsm-select>
+                </div>
+
+                <div class="d-flex align-items-center">
+                  <!-- Default Answer Checkbox -->
+                  <div class="d-flex align-items-center me-4" *ngIf="q.type !== 'write'">
+                    <input
+                      type="checkbox"
+                      class="default-answer-checkbox me-2"
+                      [checked]="q.defaultAnswerEnabled"
+                      (change)="toggleDefaultAnswers(q)"
+                    />
+                    <label class="mb-0">Default Answers</label>
+                  </div>
+
+                  <!-- Delete -->
+                  <div (click)="removeQuestion(q.id)" style="cursor: pointer">
+                    <img src="./assets/icons/delete.svg" width="20" height="20" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="dashed" />
+
+            <!-- QUESTION BODY -->
+            <div class="add-question-section container-fluid m-0 p-0 mt-1">
+              <div class="row align-items-center m-0 p-0">
+                <!-- Number -->
+                <div class="col-auto m-0 p-0">
+                  <div class="question-number">{{ q.id }}</div>
+                </div>
+
+                <!-- Question input -->
+                <div class="col m-0">
+                  <tvsm-form-field-wrapper class="w-100">
+                    <tvsm-input class="w-100" type="text"></tvsm-input>
+                  </tvsm-form-field-wrapper>
+                </div>
+
+                <!-- 1️⃣ WRITE QUESTION - NO OPTIONS -->
+                @if (q.type === 'write') {
+                  <!-- nothing here -->
+                }
+
+                <!-- 2️⃣ ENTER OPTIONS (default disabled) -->
+                @if (!q.defaultAnswerEnabled && q.type !== 'write') {
+                  <div class="col-11 p-0 options-section">
+                    <div class="enter-option-text">Enter Options</div>
+
+                    <div class="options-field-section">
+                      @for (opt of q.options; track opt.label; let i = $index) {
+                        <div class="row align-items-center m-0 p-0">
+                          <div class="col-auto m-0 p-0">
+                            <div class="question-number">{{ opt.label }}</div>
+                          </div>
+
+                          <div class="col m-0">
+                            <tvsm-form-field-wrapper class="w-100">
+                              <tvsm-input class="w-100" type="text"></tvsm-input>
+                            </tvsm-form-field-wrapper>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+
+                <!-- 3️⃣ DEFAULT ANSWERS ENABLED (Single / Multiple) -->
+                @if (q.defaultAnswerEnabled && q.type !== 'write') {
+                  <div class="col-12 p-0 options-section">
+                    <div
+                      class="radio-options multiple-choice d-flex flex-wrap align-items-center"
+                      [ngClass]="{ 'multiple-choice': q.type === 'multiple' }"
+                    >
+                      @for (opt of defaultOptions; track opt.value) {
+                        <label class="radio-item d-flex align-items-center">
+                          <input
+                            [type]="q.type === 'multiple' ? 'checkbox' : 'radio'"
+                            name="q{{ q.id }}"
+                            [value]="opt.label"
+                            [checked]="isOptionSelected(q, opt.label)"
+                            (change)="onDefaultOptionSelect(q, opt.label, $event)"
+                          />
+                          <span>{{ opt.label }}</span>
+                        </label>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Add question button -->
+      <div class="d-flex justify-content-end">
+        <button class="add-question-btn" (click)="addQuestion()">Add Question</button>
+      </div>
+    </form>
+  </div>
+</div>

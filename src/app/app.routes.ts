@@ -6,9 +6,9 @@ import { ProfileComponent } from '@app/modules/employee/profile/profile.componen
 import { CoachProfileComponent } from '@app/modules/coach/coach-profile/coach-profile.component';
 import { AdminProfileComponent } from '@app/modules/admin/admin-profile/admin-profile.component';
 import { AddCoachComponent } from '@app/modules/admin/add-coach/add-coach.component';
-import { SurveyFormComponents } from '@app/modules/admin/survey-form/survey-form.components';
 import { CustomPanelComponent } from '@app/components/custom-panel/custom-panel.component';
 import { Feedback } from '@app/modules/employee/feedback/feedback';
+import { Survey } from './modules/admin/survey/survey';
 
 export const routes: Routes = [
   {
@@ -31,8 +31,8 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path:'profile',
-    component:CustomPanelComponent
+    path: 'profile',
+    component: CustomPanelComponent,
   },
   {
     path: 'flag',
@@ -55,12 +55,12 @@ export const routes: Routes = [
     component: AddCoachComponent,
   },
   {
-    path: 'survey-form',
-    component: SurveyFormComponents,
+    path: 'survey',
+    component: Survey,
   },
   {
     path: 'feedback',
-    component: Feedback
+    component: Feedback,
   },
   {
     path: '',

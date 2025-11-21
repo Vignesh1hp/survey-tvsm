@@ -6,6 +6,12 @@ export const SURVEY_TYPE: SelectOption[] = [
   { value: 'Stress Survey', label: 'Stress Survey' },
 ];
 
+export const QUESTION_TYPE: SelectOption[] = [
+  { value: 'single-choice', label: 'Single Choice' },
+  { value: 'multiple-choice', label: 'Multiple Choice' },
+  { value: 'write-question', label: 'Write Question' },
+];
+
 export const TIMING: SelectOption[] = [
   { value: '', label: 'Select' },
   { value: '30min', label: '30 minutes' },

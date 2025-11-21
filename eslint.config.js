@@ -33,6 +33,7 @@ module.exports = [
         spyOn: 'readonly',
         HTMLElement: 'readonly',
         HTMLSelectElement: 'readonly',
+        HTMLInputElement: 'readonly',
         setTimeout: 'readonly',
         localStorage: 'readonly',
         window: 'readonly',
