@@ -35,9 +35,6 @@
     ],
     "*.json": [
       "prettier --write"
-    ],
-    "src/**/*.spec.ts": [
-      "ng test --watch=false"
     ]
   },
   "private": true,

@@ -82,7 +82,7 @@
         <!-- Add questions section -->
         <h1 class="form-label d-block">Add Questions</h1>
 
-        @for (q of questions; track q.id) {
+        @for (q of questions; track trackById(q, $index)) {
           <div class="question-card-wrapper mt-3">
             <!-- QUESTION TYPE -->
             <div class="question-type-section">
@@ -91,8 +91,6 @@
                   <tvsm-select
                     [options]="question_type"
                     placeholder="Select Type"
-                    name="questionType{{ q.id }}"
-                    [(ngModel)]="q.type"
                     (selectionChange)="onQuestionTypeChange(q, $event)"
                   ></tvsm-select>
                 </div>
@@ -173,8 +171,6 @@
                         <label class="radio-item d-flex align-items-center">
                           <input
                             [type]="q.type === 'multiple' ? 'checkbox' : 'radio'"
-                            name="q{{ q.id }}"
-                            [value]="opt.label"
                             [checked]="isOptionSelected(q, opt.label)"
                             (change)="onDefaultOptionSelect(q, opt.label, $event)"
                           />

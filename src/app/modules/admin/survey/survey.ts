@@ -93,18 +93,21 @@ export class Survey {
     return q.selectedDefaults.includes(label);
   }
 
-  onDefaultOptionSelect(q: Question, label: string, event: Event): void {
+  onDefaultOptionSelect(q: Question, label: string, event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
 
     if (q.type === 'single') {
       q.selectedDefaults = checked ? [label] : [];
     } else {
-      if (checked) {
-        q.selectedDefaults.push(label);
-      } else {
-        q.selectedDefaults = q.selectedDefaults.filter((l) => l !== label);
-      }
+      if (checked) q.selectedDefaults.push(label);
+      else q.selectedDefaults = q.selectedDefaults.filter((l) => l !== label);
     }
+  }
+
+  trackById(q: Question, index: number) {
+    console.log(index);
+
+    return q.id;
   }
 
   // ✔ ADD QUESTION
@@ -123,11 +126,15 @@ export class Survey {
   }
 
   // ✔ CHANGE QUESTION TYPE PER QUESTION
-  onQuestionTypeChange(q: Question, value: string | string[]) {
-    const selected = Array.isArray(value) ? value[0] : value;
-    q.type = selected as 'single' | 'multiple' | 'write';
+  onQuestionTypeChange(q: Question, event: string | string[]) {
+    const selected = Array.isArray(event) ? event[0] : event;
 
-    // RESET defaults & selections every time
+    const mapped = this.question_type.find((t) => t.label === selected)?.value;
+
+    if (!mapped) return; // safeguard
+
+    q.type = mapped as 'single' | 'multiple' | 'write';
+
     q.defaultAnswerEnabled = false;
     q.selectedDefaults = [];
   }
