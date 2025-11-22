@@ -424,3 +424,23 @@
     }
   }
 }
+
+.pointer {
+  cursor: pointer;
+}
+
+/* Custom checkbox only when class is applied */
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  appearance: none; /* remove default checkbox */
+  border: 2px solid #c9c9c9;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+
+  &:checked {
+    background-color: #3260f4;
+    border-color: #3260f4;
+  }
+}

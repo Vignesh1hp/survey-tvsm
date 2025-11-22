@@ -101,10 +101,13 @@
                     <input
                       type="checkbox"
                       class="default-answer-checkbox me-2"
+                      [id]="'default-answer-' + q.id"
                       [checked]="q.defaultAnswerEnabled"
                       (change)="toggleDefaultAnswers(q)"
                     />
-                    <label class="mb-0">Default Answers</label>
+                    <label class="mb-0 pointer" [for]="'default-answer-' + q.id"
+                      >Default Answers</label
+                    >
                   </div>
 
                   <!-- Delete -->
@@ -164,7 +167,7 @@
                 @if (q.defaultAnswerEnabled && q.type !== 'write') {
                   <div class="col-12 p-0 options-section">
                     <div
-                      class="radio-options multiple-choice d-flex flex-wrap align-items-center"
+                      class="radio-options d-flex flex-wrap align-items-center"
                       [ngClass]="{ 'multiple-choice': q.type === 'multiple' }"
                     >
                       @for (opt of defaultOptions; track opt.value) {
@@ -173,6 +176,7 @@
                             [type]="q.type === 'multiple' ? 'checkbox' : 'radio'"
                             [checked]="isOptionSelected(q, opt.label)"
                             (change)="onDefaultOptionSelect(q, opt.label, $event)"
+                            [class.custom-checkbox]="q.type === 'multiple'"
                           />
                           <span>{{ opt.label }}</span>
                         </label>

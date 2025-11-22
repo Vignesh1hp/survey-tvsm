@@ -129,11 +129,17 @@ export class Survey {
   onQuestionTypeChange(q: Question, event: string | string[]) {
     const selected = Array.isArray(event) ? event[0] : event;
 
-    const mapped = this.question_type.find((t) => t.label === selected)?.value;
+    // Find selected item directly from QUESTION_TYPE
+    const item = this.question_type.find((t) => t.label === selected || t.value === selected);
+    if (!item) return;
 
-    if (!mapped) return; // safeguard
+    // Convert value to internal type
+    if (item.value.includes('single')) q.type = 'single';
+    else if (item.value.includes('multiple')) q.type = 'multiple';
+    else q.type = 'write';
 
-    q.type = mapped as 'single' | 'multiple' | 'write';
+    console.log('Selected:', selected);
+    console.log('Final type:', q.type);
 
     q.defaultAnswerEnabled = false;
     q.selectedDefaults = [];
